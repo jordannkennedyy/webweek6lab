@@ -4,8 +4,8 @@ const path = require("path");
  * File Name: main.js
  * Description:
  *
- * Created Date:
- * Author:
+ * Created Date: Oct 11, 2023
+ * Author: Jordan Kennedy
  *
  */
 
