@@ -16,12 +16,12 @@ const path = require("path");
 /**
  * Description: decompress file from given pathIn, write to given pathOut
  *
- * @param {"./myfile.zip"} pathIn
- * @param {"./unzipped"} pathOut
+ * @param {string} pathIn
+ * @param {string} pathOut
  * @return {promise}
  */
 const unzip = (pathIn, pathOut) => {
-return new Promise((reject, resolve) => {
+return new Promise((resolve, reject) => {
   fs.createReadStream(pathIn)
     .on("error", (err) => reject(err))
     .pipe(unzipper.Extract({pathOut}))
@@ -29,6 +29,9 @@ return new Promise((reject, resolve) => {
     .on("end", () => resolve("Extraction Complete!"))
 })
 }
+
+let pathIn = "./myfile.zip"
+let pathOut = "./unzipped"
 
 unzip(pathIn, pathOut)
   .then((data) => console.log(data))
