@@ -24,18 +24,11 @@ const unzip = (pathIn, pathOut) => {
 return new Promise((resolve, reject) => {
   fs.createReadStream(pathIn)
     .on("error", (err) => reject(err))
-    .pipe(unzipper.Extract({pathOut}))
+    .pipe(unzipper.Extract({path: pathOut}))
     .on("error", (err) => reject(err))
     .on("end", () => resolve("Extraction Complete!"))
 })
 }
-
-let pathIn = "./myfile.zip"
-let pathOut = "./unzipped"
-
-unzip(pathIn, pathOut)
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
 
 /**
  * Description: read all the png files from given directory and return Promise containing array of each png file path
@@ -43,16 +36,21 @@ unzip(pathIn, pathOut)
  * @param {./unzipped} unzipPath
  * @return {promise}
  */
+
 const readDir = (unzipPath) => {
-  return new Promise((reject, resolve) => {
+  return new Promise((resolve, reject) => {
+    const pathArray = []
+    // readDir will return a buffer, so you need to return file.to string
     fs.readDir(unzipPath, (err, files) => {
           if (err){
             reject(err)
           } else {
-            if (".jpg" in path.extname(files)) {
-              resolve(files)
-            } else {
-              resolve(null)
+            for(files of unzipPath) {
+              if(".jpg" in path.extname(files)) {
+                pathArray.push(files.toString())
+              } else {
+                resolve(null)
+            } resolve(pathArray)
             }
           }
       })
@@ -67,7 +65,19 @@ const readDir = (unzipPath) => {
  * @param {string} pathProcessed
  * @return {promise}
  */
-const grayScale = (pathIn, pathOut) => {};
+
+// pathin will be data returned by previous function
+const grayScale = (pathIn, pathOut) => {
+  return new Promise((resolve, reject) =>{
+
+  })
+};
+
+
+
+
+
+
 
 module.exports = {
   unzip,
