@@ -69,7 +69,11 @@ const readDir = (unzipPath) => {
 // pathin will be data returned by previous function
 const grayScale = (pathIn, pathOut) => {
   return new Promise((resolve, reject) =>{
-
+    for(item in pathIn){
+      fs.createReadStream(pathIn)
+      .on("error", (err) => reject(err))
+      .pipe(PNG) // imput cod from npm here
+    }
   })
 };
 
