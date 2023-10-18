@@ -46,7 +46,7 @@ const readDir = (unzipPath) => {
             const pathArray = [];
             for (const item of files) {
               if (item.endsWith(".png")) {
-                pathArray.push(path.join(__dirname, item))
+                pathArray.push(path.join(__dirname, "\\unzipped", item))
               } 
             } console.log(pathArray) 
             resolve(pathArray)
@@ -84,7 +84,7 @@ const grayScale = (pathIn, pathOut) => {
               this.data[idx + 2] = gray;
           }
         } 
-        this.pack().pipe(fs.createWriteStream(pathOut))
+        this.pack().pipe(fs.createWriteStream(pathOut + "//gray.png"))
   
       }) .on("finish", () => resolve())
     } 
