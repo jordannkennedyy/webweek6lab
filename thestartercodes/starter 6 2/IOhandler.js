@@ -10,7 +10,7 @@
 
 const unzipper = require("unzipper")
 const fs = require("fs")
-const PNG = require("pngjs")
+const PNG = require("pngjs").PNG
 const path = require("path");
 
 /**
@@ -26,7 +26,7 @@ return new Promise((resolve, reject) => {
     .on("error", (err) => reject(err))
     .pipe(unzipper.Extract({path: pathOut}))
     .on("error", (err) => reject(err))
-    .on("end", () => resolve("Extraction Complete!"))
+    .on("end", () => resolve(pathOut))
 })
 }
 
@@ -39,23 +39,23 @@ return new Promise((resolve, reject) => {
 
 const readDir = (unzipPath) => {
   return new Promise((resolve, reject) => {
-    const pathArray = []
-    // readDir will return a buffer, so you need to return file.to string
-    fs.readDir(unzipPath, (err, files) => {
-          if (err){
+    fs.readdir(unzipPath, (err, files) => {
+          if (err) {
             reject(err)
           } else {
-            for(files of unzipPath) {
-              if(".jpg" in path.extname(files)) {
-                pathArray.push(files.toString())
-              } else {
-                resolve(null)
-            } resolve(pathArray)
-            }
-          }
-      })
-    })
-};
+            const pathArray = [];
+            for (const item of files) {
+              if (item.endsWith(".png")) {
+                pathArray.push(path.join(__dirname, item))
+              } 
+            } console.log(pathArray) 
+            resolve(pathArray)
+        }
+    } 
+    )
+  })
+}
+;
 
 /**
  * Description: Read in png file by given pathIn,
@@ -69,13 +69,27 @@ const readDir = (unzipPath) => {
 // pathin will be data returned by previous function
 const grayScale = (pathIn, pathOut) => {
   return new Promise((resolve, reject) =>{
-    for(item in pathIn){
-      fs.createReadStream(pathIn)
-      .on("error", (err) => reject(err))
-      .pipe(PNG) // imput cod from npm here
-    }
-  })
-};
+    for (var item of pathIn) {
+      fs.createReadStream(item)
+        .on("error", (err) => reject(err))
+        .pipe(new PNG({filterType: 4}))
+        .on("parsed", function() {
+          for (var y = 0; y < this.height; y++) {
+            for (var x = 0; x < this.width; x++) {
+              var idx = (this.width * y + x) << 2; 
+
+              const gray = (this.data[idx] + this.data[idx + 1] + this.data[idx + 2]) / 3
+              this.data[idx] = gray;
+              this.data[idx + 1] = gray;
+              this.data[idx + 2] = gray;
+          }
+        } 
+        this.pack().pipe(fs.createWriteStream(pathOut))
+  
+      }) .on("finish", () => resolve())
+    } 
+
+  })}
 
 
 
