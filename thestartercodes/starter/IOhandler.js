@@ -3,7 +3,7 @@
  * File Name: IOhandler.js
  * Description: Collection of functions for files input/output related operations
  *
- * Created Date: Oct 11, 2023
+ * Created Date: Oct 17, 2023
  * Author: Jordan Kennedy
  *
  */
@@ -37,6 +37,7 @@ return new Promise((resolve, reject) => {
  * @return {promise}
  */
 
+// read from unzipped path, add .png files into list with added path functionality, resolve list to to fed into grayscale
 const readDir = (unzipPath) => {
   return new Promise((resolve, reject) => {
     fs.readdir(unzipPath, (err, files) => {
@@ -66,7 +67,8 @@ const readDir = (unzipPath) => {
  * @return {promise}
  */
 
-// pathin will be data returned by previous function
+// pathin will be data returned by previous readdir, loop each item, apply pngjs module to grayout image
+// write to path out (grayscale folder) with new file name.
 const grayScale = (pathIn, pathOut) => {
   return new Promise((resolve, reject) =>{
     for (var item of pathIn) {
@@ -90,11 +92,6 @@ const grayScale = (pathIn, pathOut) => {
     } 
 
   })}
-
-
-
-
-
 
 
 module.exports = {
